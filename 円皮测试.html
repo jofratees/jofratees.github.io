@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>孟德尔的原皮测试仪</title>
+    <style>
+        button {
+            width: 200px;
+            height: 180px;
+            font-size: 24px;
+            margin: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>op鉴定器</h1>
+    <p>点击按钮进行游戏，最后点击“通关”按钮完成游戏。</p>
+    <button onclick="clickButton(1)">1</button>
+    <button onclick="clickButton(2)">2</button>
+    <button onclick="clickButton(3)">3</button>
+    <br>
+    <button onclick="clickButton(4)">4</button>
+    <button onclick="clickButton(5)">5</button>
+    <button onclick="clickButton(6)">6</button>
+    <br>
+    <button onclick="clickButton(7)">7</button>
+    <button onclick="clickButton(8)">8</button>
+    <button onclick="clickButton(9)">9</button>
+    <br>
+    <button onclick="pass()">通关</button>
+    <script>
+        var buttons = document.querySelectorAll("button");
+        var count = 0;
+        
+        function clickButton(num) {
+            buttons[num - 1].disabled = true;
+            count++;
+        }
+        
+        function pass() {
+            if (count === 9) {
+                alert("有智商的");
+            } else if (count === 1) {
+                alert("纯纯的円皮杂种");
+            } else if (count === 2) {
+                alert("狗东西");
+            } else if (count === 3) {
+                alert("有完没完");
+            } else {
+                alert("op");
+            }
+        }
+    </script>
+</body>
+</html>
