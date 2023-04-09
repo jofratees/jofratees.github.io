@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>猜人名小游戏</title>
+</head>
+<body>
+    <h1>猜人名小游戏</h1>
+    <p>你有三次机会猜出正确的人名，每次猜错会扣除一次机会。</p>
+    <p>请输入一个人名：</p>
+    <input type="text" id="inputName">
+    <button onclick="checkName()">猜一猜</button>
+    <p id="result"></p>
+    <script>
+        var names = ["加托达特", "达波沃特", "斯宾莱特", "福瑞伊特", "卓夫莱特"];
+        var chances = 3;
+        
+        function checkName() {
+            var inputName = document.getElementById("inputName").value;
+            if (names.indexOf(inputName) !== -1) {
+                document.getElementById("result").innerHTML = "恭喜你猜对了！";
+            } else {
+                chances--;
+                if (chances > 0) {
+                    document.getElementById("result").innerHTML = "猜错了，你还有 " + chances + " 次机会。";
+                } else {
+                    document.getElementById("result").innerHTML = "很遗憾，你没有猜对。正确的人名是 " + names[Math.floor(Math.random() * names.length)] + "。";
+                    document.querySelector("button").disabled = true;
+                }
+            }
+        }
+    </script>
+</body>
+</html>
