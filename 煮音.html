@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>音乐播放猪🐷</title>
+</head>
+<body>
+	<h1>音乐播放猪</h1>
+	<div>
+		<audio id="audio" src="audio_file_path.mp3"></audio>
+		<button onclick="play()">播放/暂停</button>
+		<button onclick="restart()">重新开始</button>
+		<input id="volume" type="range" min="0" max="1" step="0.1" value="1" oninput="updateVolume()">
+		<input id="seekbar" type="range" min="0" max="100" step="1" value="0" oninput="updateSeekBar()">
+		<span id="current-time">0:00</span>
+		<span id="duration">0:00</span>
+	</div>
+
+	<script>
+		var audio = document.getElementById('audio');
+		var volume = document.getElementById('volume');
+		var seekBar = document.getElementById('seekbar');
+		var currentTime = document.getElementById('current-time');
+		var duration = document.getElementById('duration');
+
+		function play() {
+			if (audio.paused) {
+				audio.play();
+			} else {
+				audio.pause();
+			}
+		}
+
+		function restart() {
+			audio.currentTime = 0;
+			audio.play();
+		}
+
+		function updateVolume() {
+			audio.volume = volume.value;
+		}
+
+		function updateSeekBar() {
+			audio.currentTime = (audio.duration * (seekBar.value / 100));
+		}
+
+		function formatTime(seconds) {
+			var minutes = Math.floor(seconds / 60);
+			var seconds = Math.round(seconds % 60);
+			if (seconds < 10) {
+				seconds = '0' + seconds;
+			}
+			return minutes + ':' + seconds;
+		}
+
+		audio.addEventListener('timeupdate', function() {
+			var current = formatTime(audio.currentTime);
+			var end = formatTime(audio.duration);
+			currentTime.innerHTML = current;
+			duration.innerHTML = end;
+			seekBar.value = (audio.currentTime / audio.duration) * 100;
+		});
+	</script>
+</body>
+</html>
