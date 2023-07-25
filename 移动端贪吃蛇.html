@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>贪吃蛇移动端</title>
+    <style>
+        #game-board {
+            width: 400px;
+            height: 400px;
+            border: 1px solid black;
+            position: relative;
+        }
+
+        .snake-part {
+            width: 20px;
+            height: 20px;
+            background-color: green;
+            position: absolute;
+        }
+
+        #food {
+            width: 20px;
+            height: 20px;
+            background-color: red;
+            position: absolute;
+        }
+    </style>
+</head>
+<body>
+    <div id="game-board"></div>
+    <button id="up">上</button>
+    <button id="down">下</button>
+    <button id="left">左</button>
+    <button id="right">右</button>
+
+    <script>
+        var gameBoard = document.getElementById("game-board");
+        var snakeParts = [];
+        var snakeSize = 3;
+        var currentDirection = "right";
+        var food;
+        function createSnakeAndFood() {
+            for (var i = snakeSize - 1; i >= 0; i--) {
+                snakeParts.push({ x: i, y: 0 });
+            }
+            createFood();
+        }
+
+        function createFood() {
+            var foodX = Math.floor(Math.random() * 20);
+            var foodY = Math.floor(Math.random() * 20);
+            food = { x: foodX, y: foodY };
+        }
+
+        function drawSnakeAndFood() {
+            gameBoard.innerHTML = "";
+
+            snakeParts.forEach(function (part) {
+                var snakePart = document.createElement("div");
+                snakePart.style.left = part.x * 20 + "px";
+                snakePart.style.top = part.y * 20 + "px";
+                snakePart.classList.add("snake-part");
+                gameBoard.appendChild(snakePart);
+            });
+
+            var foodElement = document.createElement("div");
+            foodElement.style.left = food.x * 20 + "px";
+            foodElement.style.top = food.y * 20 + "px";
+            foodElement.id = "food";
+            gameBoard.appendChild(foodElement);
+        }
+
+        function moveSnake() {
+            var head = Object.assign({}, snakeParts[0]);
+
+            if (currentDirection === "right") {
+                head.x++;
+            } else if (currentDirection === "left") {
+                head.x--;
+            } else if (currentDirection === "up") {
+                head.y--;
+            } else if (currentDirection === "down") {
+                head.y++;
+            }
+
+            snakeParts.unshift(head);
+
+            if (head.x === food.x && head.y === food.y) {
+                snakeSize++;
+                createFood();
+            } else {
+                snakeParts.pop();
+            }
+        }
+        function updateDirection(event) {
+            var key = event.keyCode;
+            if (key === 37 && currentDirection !== "right") { // 左
+                currentDirection = "left";
+            } else if (key === 38 && currentDirection !== "down") { // 上
+                currentDirection = "up";
+            } else if (key === 39 && currentDirection !== "left") { // 右
+                currentDirection = "right";
+            } else if (key === 40 && currentDirection !== "up") { // 下
+                currentDirection = "down";
+            }
+        }
+        function checkGameOver() {
+            var head = snakeParts[0];
+
+            if (
+                head.x < 0 || head.x >= 20 ||
+                head.y < 0 || head.y >= 20 ||
+                checkSnakeCollision()
+            ) {
+                clearInterval(gameInterval);
+                alert("游戏结束！");
+            }
+        }
+        function checkSnakeCollision() {
+            var head = snakeParts[0];
+
+            for (var i = 1; i < snakeParts.length; i++) {
+                if (head.x === snakeParts[i].x && head.y === snakeParts[i].y) {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+        function updateGame() {
+            moveSnake();
+            drawSnakeAndFood();
+            checkGameOver();
+        }
+        function initGame() {
+            createSnakeAndFood();
+            drawSnakeAndFood();
+            document.addEventListener("keydown", updateDirection);
+            document.getElementById("up").addEventListener("click", function () {
+                if (currentDirection !== "down") {
+                    currentDirection = "up";
+                }
+            });
+            document.getElementById("down").addEventListener("click", function () {
+                if (currentDirection !== "up") {
+                    currentDirection = "down";
+                }
+            });
+            document.getElementById("left").addEventListener("click", function () {
+                if (currentDirection !== "right") {
+                    currentDirection = "left";
+                }
+            });
+            document.getElementById("right").addEventListener("click", function () {
+                if (currentDirection !== "left") {
+                    currentDirection = "right";
+                }
+            });
+
+            gameInterval = setInterval(updateGame, 200);
+        }
+
+        initGame();
+    </script>
+</body>
+</html>
