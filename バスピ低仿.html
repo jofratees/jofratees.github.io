@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>萨卡班甲鱼养成游戏</title>
+  <style>
+    #fish {
+      width: 100px;
+      height: 30px;
+      background-color: blue;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+  </style>
+</head>
+<body>
+  <div id="fish"></div>
+  <div id="healthBar"></div>
+  <div id="score">Score: 0</div>
+  <button id="toggleButton">买食物</button>
+
+  <script>
+    var health = 10;
+    var score = 0;
+    var interval;
+
+    function updateHealthBar() {
+      var healthBar = document.getElementById("healthBar");
+      healthBar.innerHTML = "Health: " + health + " / 10";
+    }
+
+    function decreaseHealth() {
+      if (health > 0) {
+        health--;
+        updateHealthBar();
+        if (health === 0) {
+          clearInterval(interval);
+          alert("Fish has died!");
+        }
+      }
+    }
+
+    function increaseScore() {
+      score++;
+      document.getElementById("score").innerHTML = "Score: " + score;
+    }
+
+    function toggle() {
+      if (health < 10 && score >= 5) {
+        health += 3;
+        score -= 5;
+        updateHealthBar();
+        document.getElementById("score").innerHTML = "Score: " + score;
+      }
+    }
+
+    interval = setInterval(decreaseHealth, 3000);
+    setInterval(increaseScore, 2000);
+
+    document.getElementById("toggleButton").addEventListener("click", toggle);
+  </script>
+</body>
+</html>
